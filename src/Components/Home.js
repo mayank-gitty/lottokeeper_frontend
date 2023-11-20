@@ -30,7 +30,7 @@ const Home = () => {
 
     console.log('reloading operator')
     const user = axios
-      .get(`http://localhost:3001/getOperator`)
+      .get(`https://lotto-backend.onrender.com/getOperator`)
       .then((response) => {
         console.log("operator balance", response);
 
@@ -41,6 +41,7 @@ const Home = () => {
         }
       })
       .catch((err) => {
+        // alert('backend connected')
         console.log("err", err);
       });
   }, [reloadHome]);

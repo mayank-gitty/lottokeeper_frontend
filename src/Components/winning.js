@@ -15,7 +15,7 @@ const DatatablePage = () => {
 
     if (LID) {
       const user = axios
-        .get(`http://localhost:3001/getUser`, {
+        .get(`https://lotto-backend.onrender.com/getUser`, {
           params: {
             name: LID,
           },

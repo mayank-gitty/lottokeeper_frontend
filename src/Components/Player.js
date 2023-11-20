@@ -41,7 +41,7 @@ const Player = () => {
 
   const addTicket = (ticket) => {
     const newUser = axios
-      .post(`http://localhost:3001/addTicket`, {
+      .post(`https://lotto-backend.onrender.com/addTicket`, {
         playerName: ticket.playerName,
         numbers: ticket.numbers,
         hits: ticket.hits, // Implement calculateHits function
@@ -60,7 +60,7 @@ const Player = () => {
     // localStorage.setItem("lottoId", username);
 
     const newUser = axios
-      .post(`http://localhost:3001/addUser`, {
+      .post(`https://lotto-backend.onrender.com/addUser`, {
         name: playerName,
         playerBalance: 10000,
         tickets: [],
@@ -89,7 +89,7 @@ const Player = () => {
     console.log("playerName", playerName);
 
     const user = axios
-      .get(`http://localhost:3001/getUser`, {
+      .get(`https://lotto-backend.onrender.com/getUser`, {
         params: {
           name: playerName,
         },
@@ -115,7 +115,7 @@ const Player = () => {
     console.log("ob", balance);
 
     axios
-      .post(`http://localhost:3001/operatorUpdate`, {
+      .post(`https://lotto-backend.onrender.com/operatorUpdate`, {
         balance: balance,
         // Tw: Tw,
         name: "operator",
@@ -212,7 +212,7 @@ const Player = () => {
 
     if (LID) {
       const user = axios
-        .get(`http://localhost:3001/getUser`, {
+        .get(`https://lotto-backend.onrender.com/getUser`, {
           params: {
             name: LID,
           },
@@ -295,7 +295,7 @@ const Player = () => {
     console.log("tw", Tw);
 
     axios
-      .post(`http://localhost:3001/userUpdate`, {
+      .post(`https://lotto-backend.onrender.com/userUpdate`, {
         balance: balance,
         Tw: Tw,
         name: playerName,
@@ -316,7 +316,7 @@ const Player = () => {
     console.log("tw", Tw);
 
     axios
-      .post(`http://localhost:3001/userUpdate`, {
+      .post(`https://lotto-backend.onrender.com/userUpdate`, {
         balance: balance,
         Tw: Tw,
         name: playerName,

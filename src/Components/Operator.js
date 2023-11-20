@@ -32,7 +32,7 @@ const Operator = () => {
 
   useEffect(() => {
     const user = axios
-      .get(`http://localhost:3001/getOperator`)
+      .get(`https://lotto-backend.onrender.com/getOperator`)
       .then((response) => {
         console.log("user from backend", response);
 
@@ -79,7 +79,7 @@ const Operator = () => {
     console.log("ob", operatorBalance);
 
     const user = axios
-      .post(`http://localhost:3001/add/coupons`, {
+      .post(`https://lotto-backend.onrender.com/add/coupons`, {
         coupons: coupons,
         number_of_coupons: sectionsToGenerate,
         balance: operatorBalance,
