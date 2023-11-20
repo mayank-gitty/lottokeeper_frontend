@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "loki": "^0.33.0"
-  }
+  },
+  "proxy":"https://lotto-backend.onrender.com/"
 
 }

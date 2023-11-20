@@ -1,85 +1,83 @@
 import logo from "./logo.svg";
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import 'bootstrap-css-only/css/bootstrap.min.css';
-import 'mdbreact/dist/css/mdb.css';
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import "bootstrap-css-only/css/bootstrap.min.css";
+import "mdbreact/dist/css/mdb.css";
 import "./App.css";
 import Player from "./Components/Player";
-// import Operator from "./Components/operator";
+
 import { useState, createContext } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Winnings from "./Components/winning";
+import { BrowserRouter, Routes, Route, useActionData } from "react-router-dom";
+import PlayerWinnings from "./Components/Wnning";
 import Home from "./Components/Home";
 import Operator from "./Components/Operator";
-// import { useNavigate } from "react-router-dom";
-
-// var db = new loki('example.db');
 
 export const UserContext = createContext();
 
-
 function App() {
   const [playerName, setPlayerName] = useState("");
+  const [guessNumber, setGuessNumber] = useState();
+  const [matchedNumber, setMatchedNumber] = useState();
   const [reload, setReload] = useState(false);
   const [reloadHome, setReloadHome] = useState(false);
-  const [operatorReload,setOperatorReload] = useState(false);
-  const [activePlayer,setActivePlayer] = useState('')
-  const [playerHolderText,setplayerHolderText]  = useState("PLAY GAME")
-  const [playerBalance, setPlayerBalance] = useState(10000);  
+  const [operatorReload, setOperatorReload] = useState(false);
+  const [activePlayer, setActivePlayer] = useState("");
+  const [playerHolderText, setPlayerHolderText] = useState("PLAY GAME");
+  const [playerBalance, setPlayerBalance] = useState(10000);
   const [tickets, setTickets] = useState([]);
-  const [sectionsToGenerate, setSectionsToGenerate] = useState(0);
-  const [generatedSections, setGeneratedSections] = useState([]);
-  const [playerTotalWinnings, setplayerTotalWinnings] = useState(0);
-  const [couponsCount, setcouponsCount] = useState(0);
+  const [winningCouponsCount, setWinningCouponsCount] = useState(0);
+  const [winningCoupons, setWinningCoupons] = useState([]);
+  const [playerTotalWinnings, setPlayerTotalWinnings] = useState(0);
+  const [couponsCount, setCouponsCount] = useState(0);
 
   const [operatorBalance, setOperatorBalance] = useState(0);
-  const [sectionsToGenerateInPLayer, setSectionsToGenerateInPlayer] =
-    useState(0);
-  const [generatedSectionsInPlayer, setGeneratedSectionsInPlayer] = useState(
-    []
-  );
+
   const [drawnNumbers, setDrawnNumbers] = useState([]);
 
 
   return (
     <UserContext.Provider
       value={{
+        guessNumber,
+        setGuessNumber,
+        matchedNumber, setMatchedNumber,
         playerName,
         setPlayerName,
         playerTotalWinnings,
-        setplayerTotalWinnings,
-        generatedSections,
-        setGeneratedSections,
+        setPlayerTotalWinnings,
+        winningCoupons,
+        setWinningCoupons,
         playerBalance,
         setPlayerBalance,
         tickets,
         setTickets,
-        sectionsToGenerate,
-        setSectionsToGenerate,
-        generatedSections,
-        setGeneratedSections,
+        winningCouponsCount,
+        setWinningCouponsCount,
+        winningCoupons,
+        setWinningCoupons,
         operatorBalance,
         setOperatorBalance,
 
-        sectionsToGenerateInPLayer,
-        setSectionsToGenerateInPlayer,
         drawnNumbers,
         setDrawnNumbers,
         playerHolderText,
-        setplayerHolderText,
+        setPlayerHolderText,
         activePlayer,
-        reload, setReload,
-        operatorReload,setOperatorReload,
-        couponsCount, setcouponsCount,
+        reload,
+        setReload,
+        operatorReload,
+        setOperatorReload,
+        couponsCount,
+        setCouponsCount,
         setActivePlayer,
-        reloadHome, setReloadHome
+        reloadHome,
+        setReloadHome,
       }}
     >
       <BrowserRouter>
         <Routes>
-          <Route path="/winnings" element={<Winnings />} />
+          <Route path="/winnings" element={<PlayerWinnings />} />
           <Route path="/" element={<Home />} />
-          <Route path="/operator" element={<Operator/>} />
-          {/* <Route path="/settings" element={<Settings />} /> */}
+          <Route path="/operator" element={<Operator />} />
         </Routes>
       </BrowserRouter>
     </UserContext.Provider>

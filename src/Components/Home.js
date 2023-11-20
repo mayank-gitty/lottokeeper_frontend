@@ -9,40 +9,45 @@ const Home = () => {
   const navigate = useNavigate();
 
   const {
-    setGeneratedSections,
+    setWinningCoupons,
     setReload,
     reload,
     activePlayer,
     setActivePlayer,
-    reloadHome, setReloadHome
+    reloadHome,
+    setReloadHome,
+    guessNumber,
+    setGuessNumber,
   } = useContext(UserContext);
 
   const logoutUser = () => {
     localStorage.removeItem("lottoId");
 
     setTimeout(() => {
-      setReload(!reload);
+      navigate("/");
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     }, 1000);
   };
 
   useEffect(() => {
     //initial winning coupons
-
-    console.log('reloading operator')
     const user = axios
-      .get(`https://lotto-backend.onrender.com/getOperator`)
+      .get(
+        `
+https://lotto-backend.onrender.com/getOperator`
+      )
       .then((response) => {
-        console.log("operator balance", response);
+        // console.log("operator balance", response);
 
         if (response.data !== null) {
-          // setOperatorBalance(response?.data?.balance);
-          // setSectionsToGenerate(response?.data?.number_of_coupons);
-          setGeneratedSections(response?.data?.coupons);
+          setWinningCoupons(response?.data?.coupons);
         }
       })
       .catch((err) => {
-        // alert('backend connected')
-        console.log("err", err);
+        // console.log("err", err);
       });
   }, [reloadHome]);
 
@@ -76,13 +81,7 @@ const Home = () => {
         <div className="player-profile">
           <Player />
         </div>
-
-        {/* <div className="operator-profile">
-          <Operator />
-        </div> */}
       </div>
-
-      {/* <Operator /> */}
     </div>
   );
 };

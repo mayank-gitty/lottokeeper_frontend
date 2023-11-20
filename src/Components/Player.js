@@ -2,35 +2,33 @@
 import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../App";
 import { useNavigate } from "react-router-dom";
-import { db, users } from "../db/db";
 import axios from "axios";
 
 const Player = () => {
-  const [guessNumber, setGuessNumber] = useState();
   const navigate = useNavigate();
-
-  const [matchedNumber, setMatchedNumber] = useState();
 
   const {
     playerHolderText,
-    setplayerHolderText,
-    generatedSections,
-    setGeneratedSections,
+    guessNumber,
+    setGuessNumber,
+    setPlayerHolderText,
+    winningCoupons,
+    setotalWinningsinningCoupons,
     playerTotalWinnings,
-    setplayerTotalWinnings,
+    setPlayerTotalWinnings,
     playerName,
     setPlayerName,
     playerBalance,
     setPlayerBalance,
     tickets,
     setTickets,
-    sectionsToGenerate,
-    setSectionsToGenerate,
+    winningCouponsCount,
+    setotalWinningsinningCouponsCount,
     operatorBalance,
     setOperatorBalance,
 
-    sectionsToGenerateInPLayer,
-    setSectionsToGenerateInPlayer,
+    winningCouponsCountInPLayer,
+    setotalWinningsinningCouponsCountInPlayer,
     drawnNumbers,
     setDrawnNumbers,
     activePlayer,
@@ -41,97 +39,102 @@ const Player = () => {
 
   const addTicket = (ticket) => {
     const newUser = axios
-      .post(`https://lotto-backend.onrender.com/addTicket`, {
-        playerName: ticket.playerName,
-        numbers: ticket.numbers,
-        hits: ticket.hits, // Implement calculateHits function
-        winnings: ticket.winnings,
-      })
+      .post(
+        `
+https://lotto-backend.onrender.com/addTicket`,
+        {
+          playerName: ticket.playerName,
+          numbers: ticket.numbers,
+          hits: ticket.hits, // Implement calculateHits function
+          winnings: ticket.winnings,
+        }
+      )
       .then((response) => {
-        console.log("ticket created", response);
+        // console.log("ticket created", response);
       })
       .catch((err) => {
-        console.log("err", err);
+        // console.log("err", err);
       });
   };
 
   // Add a user to the database
   const addUser = (username) => {
-    // localStorage.setItem("lottoId", username);
-
     const newUser = axios
-      .post(`https://lotto-backend.onrender.com/addUser`, {
-        name: playerName,
-        playerBalance: 10000,
-        tickets: [],
-        tw: 0,
-      })
+      .post(
+        `
+https://lotto-backend.onrender.com/addUser`,
+        {
+          name: playerName,
+          playerBalance: 10000,
+          tickets: [],
+          totalWinnings: 0,
+        }
+      )
       .then((response) => {
-        console.log("new user created", response, response.data.name);
-
-        // setPlayerName(response?.data?.name);
         localStorage.setItem("lottoId", response?.data?.name);
         setPlayerBalance(response?.data?.playerBalance);
         setTickets(response?.data?.tickets);
-        setplayerTotalWinnings(response?.data?.tw);
+        setPlayerTotalWinnings(response?.data?.totalWinnings);
         setActivePlayer(response?.data?.name);
       })
       .catch((err) => {
-        console.log("err", err);
+        // console.log("err", err);
       });
-
-    // db.saveDatabase();
   };
 
   // Get all users from the database
 
   const getUser = () => {
-    console.log("playerName", playerName);
+    // console.log("playerName", playerName);
 
     const user = axios
-      .get(`https://lotto-backend.onrender.com/getUser`, {
-        params: {
-          name: playerName,
-        },
-      })
+      .get(
+        `
+https://lotto-backend.onrender.com/getUser`,
+        {
+          params: {
+            name: playerName,
+          },
+        }
+      )
       .then((response) => {
-        console.log("user from backend", response);
+        // console.log("user from backend", response);
         if (response.data !== null) {
           setPlayerName(response.data?.name);
           localStorage.setItem("lottoId", response?.data?.name);
           setActivePlayer(response.data?.name);
           setPlayerBalance(response.data?.playerBalance);
-          setplayerTotalWinnings(response.data?.tw);
+          setPlayerTotalWinnings(response.data?.totalWinnings);
         } else {
           addUser(playerName);
         }
       })
       .catch((err) => {
-        console.log("err", err);
+        // console.log("err", err);
       });
   };
 
   const operatorUpdate = (balance) => {
-    console.log("ob", balance);
+    // console.log("ob", balance);
 
     axios
-      .post(`https://lotto-backend.onrender.com/operatorUpdate`, {
-        balance: balance,
-        // Tw: Tw,
-        name: "operator",
-      })
+      .post(
+        `
+https://lotto-backend.onrender.com/operatorUpdate`,
+        {
+          balance: balance,
+          name: "operator",
+        }
+      )
       .then((response) => {
-        // alert("tickets price deducted");
-        console.log("operator balance updated", response);
+        // console.log("operator balance updated", response);
       })
       .catch((err) => {
-        console.log("err", err);
+        // console.log("err", err);
       });
   };
 
-  const start = () => {
-    console.log("check name", playerName, playerBalance);
-
+  const startGame = () => {
     const drawNumbers = Array.from(
       { length: 5 },
       () => Math.floor(Math.random() * 39) + 1
@@ -142,10 +145,10 @@ const Player = () => {
     const ticket = {
       playerName: activePlayer,
       numbers: drawNumbers,
-      hits: calculateHits(drawNumbers, generatedSections), // Implement calculateHits function
+      hits: calculateHits(drawNumbers, winningCoupons), // Implement calculateHits function
       winnings: calculateWinnings(
         drawNumbers,
-        calculateHits(drawNumbers, generatedSections)
+        calculateHits(drawNumbers, winningCoupons)
       ),
     };
 
@@ -157,25 +160,13 @@ const Player = () => {
       if (ticket.winnings !== 0) {
         alert(`wow you won ${ticket.winnings} amount for ${ticket.hits} hits`);
 
-        console.log(ticket.winnings);
-
-        console.log("pB", playerBalance);
-
         const gameplayDeduction = playerBalance - 500;
-
-        console.log("gd", gameplayDeduction);
-
-        console.log("wdd", ticket.winnings);
 
         const winningAddition = gameplayDeduction + ticket.winnings;
 
-        // console.log( 'wAd',gameplayDeduction)
-
-        console.log("c", winningAddition);
-
         setPlayerBalance(winningAddition);
 
-        setplayerTotalWinnings(playerTotalWinnings + ticket.winnings);
+        setPlayerTotalWinnings(playerTotalWinnings + ticket.winnings);
 
         addWinnings(winningAddition, playerTotalWinnings + ticket.winnings);
 
@@ -188,43 +179,45 @@ const Player = () => {
 
         operatorUpdate(afterWinningDedcutionInOperatorBalance);
 
-        setplayerHolderText("PLAY AGAIN");
+        setPlayerHolderText("PLAY AGAIN");
         // setPlayerBalance(playerBalance + ticket.winnings);
       } else {
         alert("no winning hits  ,better luck next time");
         setPlayerBalance(playerBalance - 500);
 
-        addWinningsDeduction(playerBalance - 500);
+        addNoWinningsDeduction(playerBalance - 500);
 
         setOperatorBalance(operatorBalance + 500);
 
         operatorUpdate(operatorBalance + 500);
 
-        setplayerHolderText("PlAY AGAIN");
+        setPlayerHolderText("PlAY AGAIN");
       }
     }, 2000);
   };
 
   useEffect(() => {
-    const LID = localStorage.getItem("lottoId");
+    const userName = localStorage.getItem("lottoId");
 
-    console.log(LID);
-
-    if (LID) {
+    if (userName) {
       const user = axios
-        .get(`https://lotto-backend.onrender.com/getUser`, {
-          params: {
-            name: LID,
-          },
-        })
+        .get(
+          `
+https://lotto-backend.onrender.com/getUser`,
+          {
+            params: {
+              name: userName,
+            },
+          }
+        )
         .then((response) => {
-          console.log("user from backend", response);
+          // console.log("user from backend", response);
 
           if (response.data !== null) {
             setPlayerName(response.data?.name);
             setActivePlayer(response.data?.name);
             setPlayerBalance(response.data?.playerBalance);
-            setplayerTotalWinnings(response.data?.tw);
+            setPlayerTotalWinnings(response.data?.totalWinnings);
           } else {
           }
         })
@@ -235,37 +228,9 @@ const Player = () => {
       setActivePlayer("");
       setPlayerName("");
       setPlayerBalance(10000);
-      setplayerTotalWinnings(0);
+      setPlayerTotalWinnings(0);
     }
-
-    console.log("users", users.data);
   }, [reload]);
-
-  // console.log('GeneratedSections',generatedSections)
-
-  // console.log('GeneratedSections1',setSectionsToGenerateInPlayer)
-
-  const generateWinningNumbers = () => {
-    const newSections = Array.from({ length: 1 }, () => ({
-      numbers: Array.from(
-        { length: 10 },
-        () => Math.floor(Math.random() * 39) + 1
-      ),
-      isGenerated: true,
-    }));
-
-    console.log("lp", newSections);
-
-    const FA = newSections.map((item) => item.numbers).flat();
-
-    console.log("FA", FA);
-
-    setSectionsToGenerateInPlayer(FA);
-
-    return FA;
-  };
-
-  // console.log(generatedSections);
 
   const calculateWinnings = (drawnNumbers, hits) => {
     // Implement the logic to calculate winnings
@@ -285,52 +250,47 @@ const Player = () => {
     return winning;
   };
 
-  // console.log("usersData", users);
-
-  const addWinningsDeduction = (balance, Tw) => {
+  const addNoWinningsDeduction = (balance, totalWinnings) => {
     // alert("winnings hitting");
 
-    console.log("op", balance);
-
-    console.log("tw", Tw);
-
     axios
-      .post(`https://lotto-backend.onrender.com/userUpdate`, {
-        balance: balance,
-        Tw: Tw,
-        name: playerName,
-      })
+      .post(
+        `
+https://lotto-backend.onrender.com/userUpdate`,
+        {
+          balance: balance,
+          totalWinnings: totalWinnings,
+          name: playerName,
+        }
+      )
       .then((response) => {
-        // alert("tickets price deducted");
-        console.log("user updated", response);
+        // console.log("user updated", response);
       })
       .catch((err) => {
-        console.log("err", err);
+        // console.log("err", err);
       });
   };
 
-  const addWinnings = (balance, Tw) => {
+  const addWinnings = (balance, totalWinnings) => {
     // alert("winnings hitting");
 
-    console.log("op", balance);
-    console.log("tw", Tw);
-
     axios
-      .post(`https://lotto-backend.onrender.com/userUpdate`, {
-        balance: balance,
-        Tw: Tw,
-        name: playerName,
-      })
+      .post(
+        `
+https://lotto-backend.onrender.com/userUpdate`,
+        {
+          balance: balance,
+          totalWinnings: totalWinnings,
+          name: playerName,
+        }
+      )
       .then((response) => {
-        // alert("winnings updated");
-        console.log("user updated", response);
+        // console.log("user updated", response);
       })
       .catch((err) => {
-        console.log("err", err);
+        // console.log("err", err);
       });
   };
-
-  console.log("gs", generatedSections);
 
   const playGame = () => {
     // Logic to generate 5 random numbers
@@ -339,34 +299,19 @@ const Player = () => {
       return alert("enter player name");
     }
 
-    if (generatedSections.length === 0) {
+    if (winningCoupons.length === 0) {
       return alert("no winning coupons active ");
     }
 
-    start();
-  };
-
-  console.log("playerBalance", playerBalance);
-
-  const addPlayerName = (value) => {
-    console.log(value);
-
-    setPlayerName(value);
+    startGame();
   };
 
   const calculateHits = (drawNumbers, winningNumbers) => {
-    // Implement the logic to calculate hits based on the drawn numbers
-    // For simplicity, let's assume hits are calculated based on matching numbers
-
-    console.log("d", drawNumbers);
-
-    console.log("wn", winningNumbers);
+    // console.log("d", drawNumbers);
 
     const checkHits = winningNumbers.filter((num) =>
       drawNumbers?.includes(num)
     ).length;
-
-    console.log("ch", checkHits);
 
     return checkHits;
   };
@@ -389,9 +334,6 @@ const Player = () => {
           <p className="text-left px-4"> {playerTotalWinnings} </p>
         </div>
       </div>
-
-      {/* <p>No. of tickets used: {playerBalance} coins</p> */}
-      {/* <p>Balance: {playerBalance} coins</p> */}
 
       <div className="d-flex justify-content-center align-items-center">
         {activePlayer && (
@@ -417,7 +359,6 @@ const Player = () => {
                 setPlayerName(e.target.value);
               }}
             />
-            {/* <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> */}
           </div>
         )}
 
@@ -434,12 +375,12 @@ const Player = () => {
       </div>
       {activePlayer && (
         <div className="">
-          {guessNumber && generatedSections && (
+          {guessNumber && winningCoupons && (
             <div className="d-flex flex-column winning-block">
               <p> winning Numbers </p>
 
               <div className="winning-numbers-sections">
-                {generatedSections?.map((item) => (
+                {winningCoupons?.map((item) => (
                   <span className="number"> {item} </span>
                 ))}
               </div>
@@ -458,15 +399,15 @@ const Player = () => {
             </div>
           )}
 
-          {generatedSections && guessNumber && (
+          {winningCoupons && guessNumber && (
             <div className="d-flex flex-column winning-block">
               <p> Matched Numbers </p>
               <div className="winning-numbers-sections">
-                {generatedSections.filter(
+                {winningCoupons.filter(
                   (element) => guessNumber.indexOf(element) !== -1
                 ).length === 0
                   ? "no numbers matched"
-                  : generatedSections
+                  : winningCoupons
                       .filter((element) => guessNumber.indexOf(element) !== -1)
                       .map((item) => (
                         <span className="match-number"> {item} </span>
@@ -476,8 +417,6 @@ const Player = () => {
           )}
         </div>
       )}
-
-      {/* Display list of tickets and results */}
     </div>
   );
 };
