@@ -1,0 +1,157 @@
+.App {
+  text-align: center;
+}
+
+/* .lottery-game-heading {
+
+  color: ;
+
+} */
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.btn.home-info {
+  height: 3rem;
+}
+
+
+.player-details-info {
+  /* 
+  background: #000; */
+  width: 30%;
+  margin: auto;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.operator-balance {
+
+  color: blueviolet;
+  font-weight: 500;
+
+}
+
+.lottery-info {
+
+  
+  color: green;
+  font-weight: 500;  
+
+}
+
+
+.LOTTO {
+
+  color: blueviolet;
+  font-weight: 500;
+}
+
+.player-details-info p {
+  width: 50%;
+  /* background: firebrick; */
+}
+
+.player-details-info p:nth-child(2) {
+  /* background:blueviolet; */
+  color: blueviolet;
+  font-weight: 500;
+}
+
+.winning-block {
+  padding-top: 2rem;
+  /* background-color: #61dafb; */
+  width: 80%;
+  margin: auto;
+}
+
+.winning-numbers-sections {
+  display: flex;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.winning-block .number {
+  /* margin:1.5rem 0rem ; */
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
+  background: pink;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  width: 50px;
+  height: 50px;
+}
+
+.player-profile {
+  width: 70%;
+  margin: auto;
+}
+
+.operator-profile {
+  width: 30%;
+  margin: auto;
+}
+
+.winning-block .match-number {
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
+  background: green;
+  color: white;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  width: 50px;
+  height: 50px;
+}
+
+.operator-input {
+  width: 18rem;
+  padding-left: 1em !important;
+  padding: 4px 0px;
+  border-radius: 10px;
+}
+
+.winnings-table {
+  width: 80%;
+  margin: auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
