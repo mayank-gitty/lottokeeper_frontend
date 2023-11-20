@@ -16,6 +16,7 @@ const Operator = () => {
     tickets,
     setTickets,
     winningCouponsCount,
+
     setWinningCouponsCount,
     winningCoupons,
     setWinningCoupons,
@@ -87,7 +88,7 @@ https://lotto-backend.onrender.com/add/coupons`,
         }
       )
       .then((response) => {
-        console.log("operator user updated", response);
+        // console.log("operator user updated", response);
 
         if (response.data !== null) {
           setReloadHome(!reloadHome);

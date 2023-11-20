@@ -7,6 +7,10 @@ import axios from "axios";
 const Player = () => {
   const navigate = useNavigate();
 
+  const [maskInterval ,setMaskInterval ]  = useState(false)
+  const [maskTicket ,setMaskTicket ]  = useState(false)
+  const [maskMatch ,setMaskMatch ]  = useState(false)
+
   const {
     playerHolderText,
     guessNumber,
@@ -35,6 +39,7 @@ const Player = () => {
     setActivePlayer,
     reload,
     setReload,
+  
   } = useContext(UserContext);
 
   const addTicket = (ticket) => {
@@ -135,6 +140,11 @@ https://lotto-backend.onrender.com/operatorUpdate`,
   };
 
   const startGame = () => {
+
+    setMaskInterval(true)
+     setMaskTicket(true)
+     setMaskMatch(true)
+
     const drawNumbers = Array.from(
       { length: 5 },
       () => Math.floor(Math.random() * 39) + 1
@@ -156,8 +166,30 @@ https://lotto-backend.onrender.com/operatorUpdate`,
 
     setTickets([...tickets, ticket]);
 
+    setTimeout(()=>{
+
+      setMaskInterval(false)
+
+    },500)
+
+    setTimeout(()=>{
+
+      setMaskTicket(false)
+
+    },1000)
+    
+
+    setTimeout(()=>{
+
+      setMaskMatch(false)
+
+    },1500)
+    
+
     setTimeout(() => {
       if (ticket.winnings !== 0) {
+        
+ 
         alert(`wow you won ${ticket.winnings} amount for ${ticket.hits} hits`);
 
         const gameplayDeduction = playerBalance - 500;
@@ -182,6 +214,7 @@ https://lotto-backend.onrender.com/operatorUpdate`,
         setPlayerHolderText("PLAY AGAIN");
         // setPlayerBalance(playerBalance + ticket.winnings);
       } else {
+      
         alert("no winning hits  ,better luck next time");
         setPlayerBalance(playerBalance - 500);
 
@@ -229,6 +262,7 @@ https://lotto-backend.onrender.com/getUser`,
       setPlayerName("");
       setPlayerBalance(10000);
       setPlayerTotalWinnings(0);
+      
     }
   }, [reload]);
 
@@ -273,6 +307,8 @@ https://lotto-backend.onrender.com/userUpdate`,
 
   const addWinnings = (balance, totalWinnings) => {
     // alert("winnings hitting");
+
+    console.log(balance,totalWinnings)
 
     axios
       .post(
@@ -375,7 +411,15 @@ https://lotto-backend.onrender.com/userUpdate`,
       </div>
       {activePlayer && (
         <div className="">
-          {guessNumber && winningCoupons && (
+
+
+{
+
+  maskInterval ? '' :
+
+<div className="">
+
+{guessNumber && winningCoupons &&  (
             <div className="d-flex flex-column winning-block">
               <p> winning Numbers </p>
 
@@ -387,7 +431,19 @@ https://lotto-backend.onrender.com/userUpdate`,
             </div>
           )}
 
-          {guessNumber && (
+</div>
+
+
+}
+
+
+{
+
+  maskTicket ? ' ' :
+
+<div className="">
+
+{guessNumber && (
             <div className="d-flex flex-column winning-block">
               <p> ticket drawn Numbers </p>
 
@@ -399,7 +455,20 @@ https://lotto-backend.onrender.com/userUpdate`,
             </div>
           )}
 
-          {winningCoupons && guessNumber && (
+
+
+</div>
+
+}
+        
+        {
+
+
+maskMatch ? ''  :
+
+<div className="">
+
+{winningCoupons && guessNumber && (
             <div className="d-flex flex-column winning-block">
               <p> Matched Numbers </p>
               <div className="winning-numbers-sections">
@@ -414,7 +483,16 @@ https://lotto-backend.onrender.com/userUpdate`,
                       ))}
               </div>
             </div>
+
+
           )}
+
+</div>
+
+        }
+
+     
+       
         </div>
       )}
     </div>

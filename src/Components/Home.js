@@ -18,18 +18,20 @@ const Home = () => {
     setReloadHome,
     guessNumber,
     setGuessNumber,
+    setPlayerHolderText
   } = useContext(UserContext);
 
   const logoutUser = () => {
     localStorage.removeItem("lottoId");
+    setReload(!reload)
+    setGuessNumber();
 
-    setTimeout(() => {
-      navigate("/");
+    setPlayerHolderText('PLAY GAME')
 
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
-    }, 1000);
+    // setTimeout(() => {
+    //   navigate("/");
+
+    // }, 1000);
   };
 
   useEffect(() => {
